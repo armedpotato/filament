@@ -878,17 +878,10 @@ void MetalSamplerGroup::mutate(id<MTLCommandBuffer> cmdBuffer) {
 
 void MetalSamplerGroup::useResources(id<MTLRenderCommandEncoder> renderPassEncoder) {
     assert_invariant(finalized);
-    if (@available(iOS 13, *)) {
-        // TODO: pass only the appropriate stages to useResources.
-        [renderPassEncoder useResources:textures.data()
-                                  count:textures.size()
-                                  usage:MTLResourceUsageRead | MTLResourceUsageSample
-                                 stages:MTLRenderStageFragment | MTLRenderStageVertex];
-    } else {
-        [renderPassEncoder useResources:textures.data()
-                                  count:textures.size()
-                                  usage:MTLResourceUsageRead | MTLResourceUsageSample];
-    }
+    [renderPassEncoder useResources:textures.data()
+                                      count:textures.size()
+                                      usage:MTLResourceUsageRead
+                                      stages:MTLRenderStageFragment | MTLRenderStageVertex];
 }
 
 MetalRenderTarget::MetalRenderTarget(MetalContext* context, uint32_t width, uint32_t height,
